@@ -22,7 +22,7 @@ function clientSendMessage() {
 function showMemberAction(user, act) {
     if (!act) act = 'join';
     var msg = '';
-    if (act = 'join') {
+    if (act == 'join') {
         msg = "vừa vào phòng chat";
     } else {
         msg = "vừa rời phòng chat";
@@ -34,10 +34,20 @@ function showMemberAction(user, act) {
 
 var socket = io("http://localhost:88");
 
+socket.on('server-send-chat-data', function(data) {
+    updateUserList(data.list);
+    $("#chat-block").html('');
+    data.messages.map(function(m) {
+        $("#chat-block").append("<div class='msg'><strong>" + m.user + "</strong>: " + m.msg + "</div>");
+    });
+
+});
+
 socket.on('server-send-register-fail', function() {
     $('#register-message').html('Vui lòng chọn nick nam khác');
 });
-socket.on('server-send-register-success', function() {
+socket.on('server-send-register-success', function(data) {
+    socket.username = data;
     $('#register-form').hide(1000);
     $('#chat-form').show(1000);
 });
@@ -53,12 +63,22 @@ socket.on('server-send-message', function(data) {
 });
 
 socket.on('someone-are-writing', function(data) {
+    var whois = null;
     if (data.length > 0) {
-        var whois = data[data.length - 1];
-        $('#chat-status').html('<i><strong>' + whois + '</strong> Đang viết tin nhắn</i>');
-    } else {
-        $('#chat-status').html('');
+        for (var i = data.length - 1; i >= 0; i--) {
+            var w = data[i];
+            if (w != socket.username) {
+                whois = w;
+                i = -1;
+                break;
+            }
+        }
+        if (whois) {
+            $('#chat-status').html('<i><strong>' + whois + '</strong> Đang viết tin nhắn</i>');
+            return;
+        }
     }
+    $('#chat-status').html('');
 });
 
 

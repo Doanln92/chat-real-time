@@ -14,7 +14,7 @@ var users = [];
 var writeSomehings = [];
 io.on("connection", function(socket) {
     console.log("Co nguoi ket noi " + socket.id);
-
+    socket.emit('server-send-chat-data', { list: users, messages: messages });
     socket.on("client-send-username", function(data) {
         if (users.indexOf(data) >= 0) { // neu da co user
             socket.emit("server-send-register-fail");
@@ -34,6 +34,15 @@ io.on("connection", function(socket) {
         socket.broadcast.emit("server-send-update-userlist", { list: users, user: socket.username, type: 'leave' });
     });
 
+    socket.on('disconnect', function() {
+        if (typeof socket.username != 'undefined' && users.indexOf(socket.username) >= 0) {
+            users.splice(
+                users.indexOf(socket.username), 1
+            );
+            socket.broadcast.emit("server-send-update-userlist", { list: users, user: socket.username, type: 'leave' });
+        }
+    });
+
     socket.on("client-send-message", function(msg) {
         if (messages.length > 50) {
             messages = messages.splice(0, 1);
@@ -46,13 +55,13 @@ io.on("connection", function(socket) {
         if (!(writeSomehings.indexOf(socket.username) >= 0)) {
             writeSomehings.push(socket.username);
         }
-        socket.broadcast.emit("someone-are-writing", writeSomehings);
+        io.sockets.emit("someone-are-writing", writeSomehings);
     });
     socket.on('stop-writing', function() {
         if ((writeSomehings.indexOf(socket.username) >= 0)) {
             writeSomehings.splice(writeSomehings.indexOf(socket.username), 1);
         }
-        socket.broadcast.emit("someone-are-writing", writeSomehings);
+        io.sockets.emit("someone-are-writing", writeSomehings);
     });
 
 });
