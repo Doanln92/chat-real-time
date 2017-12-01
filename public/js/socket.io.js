@@ -32,7 +32,7 @@ function showMemberAction(user, act) {
 }
 
 
-var socket = io("http://localhost:88");
+var socket = io("https://demo-chat-box.herokuapp.com");
 
 socket.on('server-send-chat-data', function(data) {
     updateUserList(data.list);
