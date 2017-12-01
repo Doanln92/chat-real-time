@@ -6,7 +6,7 @@ app.set("views", "./views");
 
 var server = require("http").Server(app);
 var io = require("socket.io")(server);
-server.listen(88);
+server.listen(process.env.PORT || 300);
 
 
 var messages = [];
