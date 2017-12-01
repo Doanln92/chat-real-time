@@ -1,0 +1,26 @@
+{
+  "name": "chat-real-time",
+  "version": "1.0.0",
+  "description": "ung dung chat real time ban 1.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "chat-real-time"
+  },
+  "keywords": [
+    "chat",
+    "real",
+    "time.",
+    "1stteam"
+  ],
+  "author": "Doan Le",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^2.5.7",
+    "express": "^4.16.2",
+    "socket.io": "^2.0.4"
+  }
+}

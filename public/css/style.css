@@ -1,0 +1,12 @@
+#chat-box,
+#list-member {
+    height: 400px;
+    overflow-y: scroll;
+    box-sizing: border-box;
+    padding: 5px;
+    text-align: left;
+}
+
+#chat-form {
+    display: none;
+}
