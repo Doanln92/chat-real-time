@@ -74,7 +74,7 @@ socket.on('someone-are-writing', function(data) {
             }
         }
         if (whois) {
-            $('#chat-status').html('<i><strong>' + whois + '</strong> Đang viết tin nhắn</i>');
+            $('#chat-status').html('<i>' + whois + ' đang viết tin nhắn...</i>');
             return;
         }
     }
