@@ -6,7 +6,7 @@ app.set("views", "./views");
 
 var server = require("http").Server(app);
 var io = require("socket.io")(server);
-server.listen(process.env.PORT || 300);
+server.listen(process.env.PORT || 3000);
 
 
 var messages = [];
@@ -32,6 +32,10 @@ io.on("connection", function(socket) {
             users.indexOf(socket.username), 1
         );
         socket.broadcast.emit("server-send-update-userlist", { list: users, user: socket.username, type: 'leave' });
+        if ((writeSomehings.indexOf(socket.username) >= 0)) {
+            writeSomehings.splice(writeSomehings.indexOf(socket.username), 1);
+        }
+        io.sockets.emit("someone-are-writing", writeSomehings);
     });
 
     socket.on('disconnect', function() {
@@ -40,6 +44,10 @@ io.on("connection", function(socket) {
                 users.indexOf(socket.username), 1
             );
             socket.broadcast.emit("server-send-update-userlist", { list: users, user: socket.username, type: 'leave' });
+            if ((writeSomehings.indexOf(socket.username) >= 0)) {
+                writeSomehings.splice(writeSomehings.indexOf(socket.username), 1);
+            }
+            io.sockets.emit("someone-are-writing", writeSomehings);
         }
     });
 
